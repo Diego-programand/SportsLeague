@@ -40,7 +40,7 @@ namespace SportsLeague.Domain.Services
                 throw new InvalidOperationException($"No se puede crear un Sponsor con Name duplicado.");
             }
 
-            return await _sponsorRepository.AddAsync(sponsor);
+            return await _sponsorRepository.CreateAsync(sponsor);
         }
 
         public async Task UpdateAsync(int id, Sponsor sponsor)
@@ -72,7 +72,7 @@ namespace SportsLeague.Domain.Services
             var sponsor = await _sponsorRepository.GetByIdAsync(id);
             if (sponsor != null)
             {
-                await _sponsorRepository.DeleteAsync(sponsor);
+                await _sponsorRepository.DeleteAsync(id);
             }
         }
 
@@ -110,7 +110,7 @@ namespace SportsLeague.Domain.Services
                 JoinedAt = DateTime.UtcNow
             };
 
-            await _tournamentSponsorRepository.AddAsync(tournamentSponsor);
+            await _tournamentSponsorRepository.CreateAsync(tournamentSponsor);
         }
 
         public async Task UnlinkFromTournamentAsync(int sponsorId, int tournamentId)
@@ -121,7 +121,7 @@ namespace SportsLeague.Domain.Services
                 throw new KeyNotFoundException("La vinculación no existe.");
             }
 
-            await _tournamentSponsorRepository.DeleteAsync(existingLink);
+            await _tournamentSponsorRepository.DeleteAsync(existingLink.Id);
         }
 
         public async Task<IEnumerable<TournamentSponsor>> GetTournamentsBySponsorAsync(int sponsorId)
