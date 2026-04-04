@@ -25,5 +25,13 @@ namespace SportsLeague.DataAccess.Repositories
                 .Include(ts => ts.Sponsor)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<TournamentSponsor>> GetBySponsorIdAsync(int sponsorId)
+        {
+            return await _dbSet
+                .Where(ts => ts.SponsorId == sponsorId)
+                .Include(ts => ts.Tournament)
+                .ToListAsync();
+        }
     }
 }

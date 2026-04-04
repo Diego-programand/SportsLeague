@@ -124,6 +124,17 @@ namespace SportsLeague.Domain.Services
             await _tournamentSponsorRepository.DeleteAsync(existingLink);
         }
 
+        public async Task<IEnumerable<TournamentSponsor>> GetTournamentsBySponsorAsync(int sponsorId)
+        {
+            var sponsor = await _sponsorRepository.GetByIdAsync(sponsorId);
+            if (sponsor == null)
+            {
+                throw new KeyNotFoundException($"El sponsor con ID {sponsorId} no existe.");
+            }
+
+            return await _tournamentSponsorRepository.GetBySponsorIdAsync(sponsorId);
+        }
+
         private void ValidateEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
