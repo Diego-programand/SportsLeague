@@ -78,6 +78,7 @@ namespace SportsLeague.Domain.Services
 
         public async Task LinkToTournamentAsync(int sponsorId, int tournamentId, decimal contractAmount)
         {
+            // TODO: A futuro, implementar la validación del monto mínimo consultando una API externa de conversión de USD a COP.
             if (contractAmount <= 10000000m)
             {
                 throw new InvalidOperationException("ContractAmount debe ser mayor a 10000000.");
