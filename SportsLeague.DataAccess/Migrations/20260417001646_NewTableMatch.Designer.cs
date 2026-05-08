@@ -12,15 +12,15 @@ using SportsLeague.DataAccess.Context;
 namespace SportsLeague.DataAccess.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    [Migration("20260421002805_AddMatchEntityAndRelations")]
-    partial class AddMatchEntityAndRelations
+    [Migration("20260417001646_NewTableMatch")]
+    partial class NewTableMatch
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.26")
+                .HasAnnotation("ProductVersion", "8.0.25")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -75,7 +75,7 @@ namespace SportsLeague.DataAccess.Migrations
 
                     b.HasIndex("TournamentId");
 
-                    b.ToTable("Match");
+                    b.ToTable("Matches");
                 });
 
             modelBuilder.Entity("SportsLeague.Domain.Entities.Player", b =>
@@ -154,51 +154,6 @@ namespace SportsLeague.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Referees");
-                });
-
-            modelBuilder.Entity("SportsLeague.Domain.Entities.Sponsor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Category")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ContactEmail")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("WebsiteUrl")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Sponsors");
                 });
 
             modelBuilder.Entity("SportsLeague.Domain.Entities.Team", b =>
@@ -283,42 +238,6 @@ namespace SportsLeague.DataAccess.Migrations
                     b.ToTable("Tournaments");
                 });
 
-            modelBuilder.Entity("SportsLeague.Domain.Entities.TournamentSponsor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("ContractAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("JoinedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SponsorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TournamentId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SponsorId");
-
-                    b.HasIndex("TournamentId", "SponsorId")
-                        .IsUnique();
-
-                    b.ToTable("TournamentSponsors");
-                });
-
             modelBuilder.Entity("SportsLeague.Domain.Entities.TournamentTeam", b =>
                 {
                     b.Property<int>("Id")
@@ -398,25 +317,6 @@ namespace SportsLeague.DataAccess.Migrations
                     b.Navigation("Team");
                 });
 
-            modelBuilder.Entity("SportsLeague.Domain.Entities.TournamentSponsor", b =>
-                {
-                    b.HasOne("SportsLeague.Domain.Entities.Sponsor", "Sponsor")
-                        .WithMany("TournamentSponsors")
-                        .HasForeignKey("SponsorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SportsLeague.Domain.Entities.Tournament", "Tournament")
-                        .WithMany("TournamentSponsors")
-                        .HasForeignKey("TournamentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Sponsor");
-
-                    b.Navigation("Tournament");
-                });
-
             modelBuilder.Entity("SportsLeague.Domain.Entities.TournamentTeam", b =>
                 {
                     b.HasOne("SportsLeague.Domain.Entities.Team", "Team")
@@ -441,11 +341,6 @@ namespace SportsLeague.DataAccess.Migrations
                     b.Navigation("Matches");
                 });
 
-            modelBuilder.Entity("SportsLeague.Domain.Entities.Sponsor", b =>
-                {
-                    b.Navigation("TournamentSponsors");
-                });
-
             modelBuilder.Entity("SportsLeague.Domain.Entities.Team", b =>
                 {
                     b.Navigation("AwayMatches");
@@ -460,8 +355,6 @@ namespace SportsLeague.DataAccess.Migrations
             modelBuilder.Entity("SportsLeague.Domain.Entities.Tournament", b =>
                 {
                     b.Navigation("Matches");
-
-                    b.Navigation("TournamentSponsors");
 
                     b.Navigation("TournamentTeams");
                 });
